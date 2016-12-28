@@ -2,27 +2,26 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     http://www.springframework.org/schema/security
-    http://www.springframework.org/schema/security/spring-security-3.0.4.xsd">
-<!--     http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	<!-- http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security/spring-security.xsd -->
+	<bean id="customExpressionHandler" class="com.example.security.CustomWebSecurityExpressionHandler">
+		<property name="serviceAuthorization" ref="serviceAuthorization"></property>
+	</bean>
+	<bean id="serviceAuthorization" class="com.example.security.ServiceAuthorization">
+	</bean>
+	<bean
+		class="org.springframework.security.web.access.expression.WebExpressionVoter"
+		id="expressionVoter">
+	</bean>
 
-http://www.springframework.org/schema/security/spring-security.xsd --> 
 	<http pattern="/**" request-matcher="ant"
 		xmlns="https://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.0.4.xsd"
+		http://www.springframework.org/schema/security/spring-security-4.0.xsd"
 		use-expression="true">
 		<expression-handler ref="customExpressionHandler" />
-		<intercept-url pattern="/**" access="isAuthorized()" />
-		<anonymous enabled="true" />
-		<bean id="customExpressionHandler"
-			class="com.example.security.CustomWebSecurityExpressionHandler">
-			<property name="serviceAuthorization" ref="serviceAuthorization"></property>
-		</bean>
-		<bean
-			class="org.springframework.security.web.access.expression.WebExpressionVoter"
-			id="expressionVoter">
-		</bean>
-	</http>
+		<intercept-url pattern="/**" access="isPassportAuthorized()" />
 
+	</http>
 </beans:beans>
